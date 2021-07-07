@@ -1,0 +1,10 @@
+class Minesweeper {
+	field Random rand;
+	field GameField field_;
+
+	constructor Minesweeper new() {
+		let rand = Random.new(57);
+		let field_ = GameField.new(rand, 15);
+		return this;
+	}
+}

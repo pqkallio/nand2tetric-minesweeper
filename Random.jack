@@ -1,0 +1,23 @@
+class Random {
+	field int x;
+	static int incr;
+	static int multiplier;
+	
+	constructor Random new(int seed) {
+		let incr = 75;
+		let x = seed;
+		let multiplier = 9;
+
+		return this;
+	}
+
+	method void seed(int newSeed) {
+		let x = newSeed;
+		return;
+	}
+
+	method int getNext() {
+		let x = multiplier * x + incr;
+		return x;
+	}
+}

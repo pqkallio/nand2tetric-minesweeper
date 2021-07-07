@@ -1,0 +1,73 @@
+class GameField {
+	field Array mField;
+	field Random mRand;
+	field int mMines;
+	static int HEIGHT;
+	static int WIDTH;
+
+	constructor GameField new(Random rand, int mines) {
+		let HEIGHT = 12;
+		let WIDTH = 28;
+		let mRand = rand;
+		let mMines = mines;
+
+		do constructField();
+		do constructCells();
+
+		return this;
+	}
+
+	method void constructField() {
+		var int i;
+		var int j;
+		var Array row;
+
+		let mField = Array.new(WIDTH);
+		let i = 0;
+
+		while (i < HEIGHT) {
+			let mField[i] = Array.new(WIDTH);
+			let j = 0;
+			let row = mField[i];
+
+			while (j < WIDTH) {
+				let row[j] = Cell.new(j, i);
+				let j = j + 1;
+			}
+
+			let i = i + 1;
+		}
+
+		return;
+	}
+
+	method void constructCells() {
+		var int i;
+		var int x;
+		var int y;
+		var Array row;
+		var Cell cell;
+
+		let i = 0;
+
+		while (i < mMines) {
+			let x = ExtMath.modulo(mRand.getNext(), WIDTH);
+			let y = ExtMath.modulo(mRand.getNext(), HEIGHT);
+			let row = mField[y];
+			let cell = row[x];
+			
+			if (~(cell.hasMine())) {
+				do cell.setHasMine(true);
+				let i = i + 1;
+
+				do Output.printString("Set mine to x = ");
+				do Output.printInt(x);
+				do Output.printString(", y = ");
+				do Output.printInt(y);
+				do Output.println();
+			}
+		}
+
+		return;
+	}
+}

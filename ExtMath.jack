@@ -1,0 +1,18 @@
+class ExtMath {
+	function int modulo (int x, int y) {
+		var int z;
+
+		if (x < 0) {
+			let x = -x;
+		}
+
+		if (y < 0) {
+			let y = -y;
+		}
+
+		let z = x / y;
+		let z = x - (z * y);
+
+		return z;
+	}
+}

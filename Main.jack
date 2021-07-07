@@ -1,0 +1,10 @@
+class Main {
+	function void main () {
+		var Minesweeper game;
+		var Random rand;
+
+		let game = Minesweeper.new();
+		
+		return;
+	}
+}

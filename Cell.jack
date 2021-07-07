@@ -1,0 +1,31 @@
+class Cell {
+	field int mX;
+	field int mY;
+	field boolean mMine;
+	field boolean mOpen;
+	field int mNeighborMines;
+
+	constructor Cell new(int x, int y) {
+		let mX = x;
+		let mY = y;
+		let mMine = false;
+		let mOpen = false;
+		let mNeighborMines = 0;
+
+		return this;
+	}
+
+	method void setHasMine(boolean mine) {
+		let mMine = mine;
+		return;
+	}
+
+	method boolean hasMine() {
+		return mMine;
+	}
+
+	method void addNeighborMines(int n) {
+		let mNeighborMines = mNeighborMines + n;
+		return;
+	}
+}
