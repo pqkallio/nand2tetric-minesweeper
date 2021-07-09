@@ -4,6 +4,7 @@ class Main {
 		var Random rand;
 
 		let game = Minesweeper.new();
+		do game.run();
 		
 		return;
 	}

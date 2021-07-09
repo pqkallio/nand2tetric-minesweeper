@@ -1,23 +1,81 @@
 class Random {
-	field int x;
-	static int incr;
-	static int multiplier;
+	static Array VALID_SEEDS;
+	static int VALID_SEEDS_LEN;
+
+	field int mSeed;
+	field int mwa;
+	field int mwMod;
+	field int mxa;
+	field int mxMod;
+	field int mya;
+	field int myMod;
+	field int mvMod;
 	
-	constructor Random new(int seed) {
-		let incr = 75;
-		let x = seed;
-		let multiplier = 9;
+	constructor Random new(int newSeed) {
+		var int i;
+
+		do constructValidSeeds();
+
+		let mwa = 157;
+		let mwMod = 32363;
+		let mxa = 146;
+		let mxMod = 31727;
+		let mya = 142;
+		let myMod = 31657;
+		let mvMod = 32362;
+
+		do seed(newSeed);
 
 		return this;
 	}
 
+	method void constructValidSeeds() {
+		let VALID_SEEDS_LEN = 21;
+		let VALID_SEEDS = Array.new(VALID_SEEDS_LEN);
+
+		let VALID_SEEDS[0] = 1;
+		let VALID_SEEDS[1] = 8;
+		let VALID_SEEDS[2] = 9;
+		let VALID_SEEDS[3] = 10;
+		let VALID_SEEDS[4] = 11;
+		let VALID_SEEDS[5] = 12;
+		let VALID_SEEDS[6] = 13;
+		let VALID_SEEDS[7] = 14;
+		let VALID_SEEDS[8] = 18;
+		let VALID_SEEDS[9] = 19;
+		let VALID_SEEDS[10] = 21;
+		let VALID_SEEDS[11] = 23;
+		let VALID_SEEDS[12] = 24;
+		let VALID_SEEDS[13] = 25;
+		let VALID_SEEDS[14] = 27;
+		let VALID_SEEDS[15] = 28;
+		let VALID_SEEDS[16] = 29;
+		let VALID_SEEDS[17] = 30;
+		let VALID_SEEDS[18] = 31;
+		let VALID_SEEDS[19] = 32;
+		let VALID_SEEDS[20] = 34;
+
+		return;
+	}
+
 	method void seed(int newSeed) {
-		let x = newSeed;
+		var int i;
+		let i = ExtMath.modulo(newSeed, VALID_SEEDS_LEN);
+		let mSeed = VALID_SEEDS[i];
 		return;
 	}
 
 	method int getNext() {
-		let x = multiplier * x + incr;
-		return x;
+		var int w;
+		var int x;
+		var int y;
+
+		let w = ExtMath.modulo(mwa * mSeed, mwMod);
+		let x = ExtMath.modulo(mxa * mSeed, mxMod);
+		let y = ExtMath.modulo(mya * mSeed, myMod);
+
+		let mSeed = ExtMath.modulo((w - x) + y, mvMod);
+
+		return mSeed;
 	}
 }

@@ -1,13 +1,14 @@
 class GameField {
 	field Array mField;
 	field Random mRand;
+	field Cell mSelected;
 	field int mMines;
-	static int HEIGHT;
-	static int WIDTH;
+	field int WIDTH;
+	field int HEIGHT;
 
 	constructor GameField new(Random rand, int mines) {
-		let HEIGHT = 12;
-		let WIDTH = 28;
+		let WIDTH = 32;
+		let HEIGHT = 16;
 		let mRand = rand;
 		let mMines = mines;
 
@@ -17,42 +18,163 @@ class GameField {
 		return this;
 	}
 
+	method void selectCellAtIdx(int idx) {
+		if (~(mSelected = null)) {
+			do mSelected.setSelected(false);
+		}
+
+		let mSelected = mField[idx];
+
+		do mSelected.setSelected(true);
+
+		return;
+	}
+
 	method void constructField() {
 		var int i;
 		var int j;
+		var int len;
 		var Array row;
+		var Array idxs;
+		var int p, q, r1, r2;
+		var int x, y;
+		var Cell cell;
 
-		let mField = Array.new(WIDTH);
+		/** let len = HEIGHT * WIDTH;
+		let idxs = Array.new(len);
+		let i = 0;
+
+		while (i < len) {
+			let idxs[i] = i;
+			let i = i + 1;
+		}
+
+		let i = 0;
+
+		while (i < len) {
+			let r1 = ExtMath.modulo(mRand.getNext(), (i + 1));
+			let r2 = ExtMath.modulo(mRand.getNext(), (len - i)) + (i + 1);
+
+			let p = idxs[r1];
+			let q = idxs[r2];
+
+			let idxs[r1] = q;
+			let idxs[r2] = p;
+
+			let i = i + 1;
+		}
+ */
+		let mField = Array.new(HEIGHT);
 		let i = 0;
 
 		while (i < HEIGHT) {
 			let mField[i] = Array.new(WIDTH);
-			let j = 0;
 			let row = mField[i];
+			let j = 0;
 
 			while (j < WIDTH) {
 				let row[j] = Cell.new(j, i);
+
 				let j = j + 1;
 			}
 
 			let i = i + 1;
 		}
+/** 
+		let i = 0;
+		while (i < mMines) {
+			let j = idxs[i];
 
+			let y = j / WIDTH;
+			let x = j - (y * WIDTH);
+
+			let row = mField[y];
+			let cell = row[x];
+
+			do cell.setHasMine(true);
+			do updateNeighbors(x, y);
+
+			let i = i + 1;
+		}
+
+		do idxs.dispose();
+ */
+		let row = mField[HEIGHT / 2];
+
+		let mSelected = row[WIDTH / 2];
+		do mSelected.setSelected(true);
+
+		return;
+	}
+
+	method boolean insideField(int x, int y) {
+		if ((x < 0) | (x > 31)) {
+			return false;
+		}
+
+		if ((y < 0) | (y > 15)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	method void updateNeighbors(int x, int y) {
+		var Cell cell;
+		var Array row;
+		var int i;
+		var int j;
+		var int origX;
+		var int origY; 
+		var boolean isInsider;
+		var boolean isOther;
+
+		let origY = y;
+		let origX = x;
+
+		let i = origY - 1;
+
+		while (i < (origY + 2)) {
+			let j = origX - 1;
+
+			while (j < (origX + 2)) {
+				let isInsider = insideField(j, i);
+				let isOther = (~(j = origX)) | (~(i = origY));
+
+				if (isInsider & isOther) {
+					let row = mField[i];
+					let cell = row[j];
+				
+					do cell.addNeighborMines(1);
+				}
+
+				let j = j + 1;
+			}
+
+			let i = i + 1;
+		}
+		
 		return;
 	}
 
 	method void constructCells() {
 		var int i;
+		var int j;
 		var int x;
 		var int y;
+		var int len;
 		var Array row;
 		var Cell cell;
 
+		let len = WIDTH * HEIGHT;
 		let i = 0;
 
 		while (i < mMines) {
-			let x = ExtMath.modulo(mRand.getNext(), WIDTH);
-			let y = ExtMath.modulo(mRand.getNext(), HEIGHT);
+			let j = ExtMath.modulo(mRand.getNext(), len);
+
+			let y = j / WIDTH;
+			let x = j - (y * WIDTH);
+
 			let row = mField[y];
 			let cell = row[x];
 			
@@ -60,12 +182,33 @@ class GameField {
 				do cell.setHasMine(true);
 				let i = i + 1;
 
-				do Output.printString("Set mine to x = ");
-				do Output.printInt(x);
-				do Output.printString(", y = ");
-				do Output.printInt(y);
-				do Output.println();
+				do updateNeighbors(x, y);
 			}
+		}
+
+		return;
+	}
+
+	method void draw() {
+		var Cell cell;
+		var Array row;
+		var int i;
+		var int j;
+
+		let i = 0;
+
+		while (i < HEIGHT) {
+			let row = mField[i];
+			let j = 0;
+
+			while (j < WIDTH) {
+				let cell = row[j];
+				do cell.draw();
+
+				let j = j + 1;
+			}
+
+			let i = i + 1;
 		}
 
 		return;

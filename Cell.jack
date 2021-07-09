@@ -1,15 +1,20 @@
 class Cell {
+	static int SCREEN;
+
 	field int mX;
 	field int mY;
 	field boolean mMine;
 	field boolean mOpen;
+	field boolean mSelected;
 	field int mNeighborMines;
 
 	constructor Cell new(int x, int y) {
+		let SCREEN = 16384;
 		let mX = x;
 		let mY = y;
 		let mMine = false;
-		let mOpen = false;
+		let mOpen = true;
+		let mSelected = false;
 		let mNeighborMines = 0;
 
 		return this;
@@ -25,7 +30,286 @@ class Cell {
 	}
 
 	method void addNeighborMines(int n) {
-		let mNeighborMines = mNeighborMines + n;
+		let mNeighborMines = (mNeighborMines + n);
+		return;
+	}
+
+	method void setSelected(bool isSelected) {
+		let mSelected = isSelected;
+		return;
+	}
+
+	method void draw() {
+		var int addr;
+		var Array border;
+		let border = Array.new(16);
+
+		if (~mSelected) {
+			let border[0] = -1;
+			let border[1] = -32767;
+			let border[2] = -32767;
+			let border[3] = -32767;
+			let border[4] = -32767;
+			let border[5] = -32767;
+			let border[6] = -32767;
+			let border[7] = -32767;
+			let border[8] = -32767;
+			let border[9] = -32767;
+			let border[10] = -32767;
+			let border[11] = -32767;
+			let border[12] = -32767;
+			let border[13] = -32767;
+			let border[14] = -32767;
+			let border[15] = -1;
+		} else {
+			let border[0] = 0;
+			let border[1] = 32766;
+			let border[2] = 16386;
+			let border[3] = 16386;
+			let border[4] = 16386;
+			let border[5] = 16386;
+			let border[6] = 16386;
+			let border[7] = 16386;
+			let border[8] = 16386;
+			let border[9] = 16386;
+			let border[10] = 16386;
+			let border[11] = 16386;
+			let border[12] = 16386;
+			let border[13] = 16386;
+			let border[14] = 32766;
+			let border[15] = 0;
+		}
+
+		let addr = SCREEN + (mY * 512) + mX;
+
+		if (~(mOpen)) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 10922 | border[1]);
+			do Memory.poke(addr + 64, 21844 | border[2]);
+			do Memory.poke(addr + 96, 10922 | border[3]);
+			do Memory.poke(addr + 128, 21844 | border[4]);
+			do Memory.poke(addr + 160, 10922 | border[5]);
+			do Memory.poke(addr + 192, 21844 | border[6]);
+			do Memory.poke(addr + 224, 10922 | border[7]);
+			do Memory.poke(addr + 256, 21844 | border[8]);
+			do Memory.poke(addr + 288, 10922 | border[9]);
+			do Memory.poke(addr + 320, 21844 | border[10]);
+			do Memory.poke(addr + 352, 10922 | border[11]);
+			do Memory.poke(addr + 384, 21844 | border[12]);
+			do Memory.poke(addr + 416, 10922 | border[13]);
+			do Memory.poke(addr + 448, 21844 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+		}
+
+		if (mMine) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 384 | border[2]);
+			do Memory.poke(addr + 96, 2448 | border[3]);
+			do Memory.poke(addr + 128, 7608 | border[4]);
+			do Memory.poke(addr + 160, 4080 | border[5]);
+			do Memory.poke(addr + 192, 2016 | border[6]);
+			do Memory.poke(addr + 224, 16380 | border[7]);
+			do Memory.poke(addr + 256, 16380 | border[8]);
+			do Memory.poke(addr + 288, 2016 | border[9]);
+			do Memory.poke(addr + 320, 4080 | border[10]);
+			do Memory.poke(addr + 352, 7608 | border[11]);
+			do Memory.poke(addr + 384, 2448 | border[12]);
+			do Memory.poke(addr + 416, 384 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 0) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 0 | border[2]);
+			do Memory.poke(addr + 96, 0 | border[3]);
+			do Memory.poke(addr + 128, 0 | border[4]);
+			do Memory.poke(addr + 160, 0 | border[5]);
+			do Memory.poke(addr + 192, 0 | border[6]);
+			do Memory.poke(addr + 224, 0 | border[7]);
+			do Memory.poke(addr + 256, 0 | border[8]);
+			do Memory.poke(addr + 288, 0 | border[9]);
+			do Memory.poke(addr + 320, 0 | border[10]);
+			do Memory.poke(addr + 352, 0 | border[11]);
+			do Memory.poke(addr + 384, 0 | border[12]);
+			do Memory.poke(addr + 416, 0 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 1) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 384 | border[2]);
+			do Memory.poke(addr + 96, 448 | border[3]);
+			do Memory.poke(addr + 128, 480 | border[4]);
+			do Memory.poke(addr + 160, 384 | border[5]);
+			do Memory.poke(addr + 192, 384 | border[6]);
+			do Memory.poke(addr + 224, 384 | border[7]);
+			do Memory.poke(addr + 256, 384 | border[8]);
+			do Memory.poke(addr + 288, 384 | border[9]);
+			do Memory.poke(addr + 320, 384 | border[10]);
+			do Memory.poke(addr + 352, 384 | border[11]);
+			do Memory.poke(addr + 384, 384 | border[12]);
+			do Memory.poke(addr + 416, 2016 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 2) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 960 | border[2]);
+			do Memory.poke(addr + 96, 1632 | border[3]);
+			do Memory.poke(addr + 128, 3120 | border[4]);
+			do Memory.poke(addr + 160, 3120 | border[5]);
+			do Memory.poke(addr + 192, 3072 | border[6]);
+			do Memory.poke(addr + 224, 3072 | border[7]);
+			do Memory.poke(addr + 256, 1536 | border[8]);
+			do Memory.poke(addr + 288, 768 | border[9]);
+			do Memory.poke(addr + 320, 384 | border[10]);
+			do Memory.poke(addr + 352, 192 | border[11]);
+			do Memory.poke(addr + 384, 96 | border[12]);
+			do Memory.poke(addr + 416, 4080 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 3) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 4080 | border[2]);
+			do Memory.poke(addr + 96, 1536 | border[3]);
+			do Memory.poke(addr + 128, 768 | border[4]);
+			do Memory.poke(addr + 160, 384 | border[5]);
+			do Memory.poke(addr + 192, 992 | border[6]);
+			do Memory.poke(addr + 224, 1536 | border[7]);
+			do Memory.poke(addr + 256, 3072 | border[8]);
+			do Memory.poke(addr + 288, 3072 | border[9]);
+			do Memory.poke(addr + 320, 3072 | border[10]);
+			do Memory.poke(addr + 352, 3120 | border[11]);
+			do Memory.poke(addr + 384, 1632 | border[12]);
+			do Memory.poke(addr + 416, 960 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 4) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 192 | border[2]);
+			do Memory.poke(addr + 96, 192 | border[3]);
+			do Memory.poke(addr + 128, 96 | border[4]);
+			do Memory.poke(addr + 160, 96 | border[5]);
+			do Memory.poke(addr + 192, 48 | border[6]);
+			do Memory.poke(addr + 224, 432 | border[7]);
+			do Memory.poke(addr + 256, 4080 | border[8]);
+			do Memory.poke(addr + 288, 384 | border[9]);
+			do Memory.poke(addr + 320, 384 | border[10]);
+			do Memory.poke(addr + 352, 384 | border[11]);
+			do Memory.poke(addr + 384, 384 | border[12]);
+			do Memory.poke(addr + 416, 384 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 5) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 2032 | border[2]);
+			do Memory.poke(addr + 96, 48 | border[3]);
+			do Memory.poke(addr + 128, 48 | border[4]);
+			do Memory.poke(addr + 160, 48 | border[5]);
+			do Memory.poke(addr + 192, 1008 | border[6]);
+			do Memory.poke(addr + 224, 1536 | border[7]);
+			do Memory.poke(addr + 256, 3072 | border[8]);
+			do Memory.poke(addr + 288, 3072 | border[9]);
+			do Memory.poke(addr + 320, 3072 | border[10]);
+			do Memory.poke(addr + 352, 3072 | border[11]);
+			do Memory.poke(addr + 384, 1584 | border[12]);
+			do Memory.poke(addr + 416, 992 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 6) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 960 | border[2]);
+			do Memory.poke(addr + 96, 1632 | border[3]);
+			do Memory.poke(addr + 128, 3120 | border[4]);
+			do Memory.poke(addr + 160, 48 | border[5]);
+			do Memory.poke(addr + 192, 48 | border[6]);
+			do Memory.poke(addr + 224, 1008 | border[7]);
+			do Memory.poke(addr + 256, 1648 | border[8]);
+			do Memory.poke(addr + 288, 3120 | border[9]);
+			do Memory.poke(addr + 320, 3120 | border[10]);
+			do Memory.poke(addr + 352, 3120 | border[11]);
+			do Memory.poke(addr + 384, 1632 | border[12]);
+			do Memory.poke(addr + 416, 960 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 7) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 4080 | border[2]);
+			do Memory.poke(addr + 96, 3072 | border[3]);
+			do Memory.poke(addr + 128, 1536 | border[4]);
+			do Memory.poke(addr + 160, 1536 | border[5]);
+			do Memory.poke(addr + 192, 768 | border[6]);
+			do Memory.poke(addr + 224, 768 | border[7]);
+			do Memory.poke(addr + 256, 384 | border[8]);
+			do Memory.poke(addr + 288, 384 | border[9]);
+			do Memory.poke(addr + 320, 192 | border[10]);
+			do Memory.poke(addr + 352, 192 | border[11]);
+			do Memory.poke(addr + 384, 96 | border[12]);
+			do Memory.poke(addr + 416, 96 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
+
+		if (mNeighborMines = 8) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 960 | border[2]);
+			do Memory.poke(addr + 96, 1632 | border[3]);
+			do Memory.poke(addr + 128, 3120 | border[4]);
+			do Memory.poke(addr + 160, 3120 | border[5]);
+			do Memory.poke(addr + 192, 1632 | border[6]);
+			do Memory.poke(addr + 224, 960 | border[7]);
+			do Memory.poke(addr + 256, 1632 | border[8]);
+			do Memory.poke(addr + 288, 3120 | border[9]);
+			do Memory.poke(addr + 320, 3120 | border[10]);
+			do Memory.poke(addr + 352, 3120 | border[11]);
+			do Memory.poke(addr + 384, 1632 | border[12]);
+			do Memory.poke(addr + 416, 960 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
 		return;
 	}
 }

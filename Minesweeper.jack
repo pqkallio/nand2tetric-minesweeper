@@ -3,8 +3,14 @@ class Minesweeper {
 	field GameField field_;
 
 	constructor Minesweeper new() {
-		let rand = Random.new(57);
-		let field_ = GameField.new(rand, 15);
+		let rand = Random.new(3);
+		let field_ = GameField.new(rand, 150);
 		return this;
+	}
+
+	method void run() {
+		do field_.draw();
+
+		return;
 	}
 }

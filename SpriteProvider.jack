@@ -218,4 +218,16 @@ class SpriteProvider {
 
 		return;
 	}
+
+	method Array open() {
+		return mOpen;
+	}
+
+	method Array mine() {
+		return mMine;
+	}
+
+	method Array closed() {
+		return mClosed;
+	}
 }
