@@ -1,0 +1,34 @@
+class Coord2D {
+	field int mX;
+	field int mY;
+
+	constructor Coord2D new(int x, int y) {
+		let mX = x;
+		let mY = y;
+
+		return this;
+	}
+
+	method void dispose() {
+		do Memory.deAlloc(this);
+		return;
+	}
+
+	method int getX() {
+		return mX;
+	}
+
+	method int getY() {
+		return mY;
+	}
+
+	method void setX(int x) {
+		let mX = x;
+		return;
+	}
+
+	method void setY(int y) {
+		let mY = y;
+		return;
+	}
+}

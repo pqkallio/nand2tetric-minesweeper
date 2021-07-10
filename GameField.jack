@@ -1,31 +1,52 @@
 class GameField {
 	field Array mField;
 	field Random mRand;
-	field Cell mSelected;
 	field int mMines;
 	field int WIDTH;
 	field int HEIGHT;
+	field Coord2D mSelected;
 
 	constructor GameField new(Random rand, int mines) {
 		let WIDTH = 32;
 		let HEIGHT = 16;
 		let mRand = rand;
 		let mMines = mines;
+		let mSelected = Coord2D.new(0, 0);
 
 		do constructField();
-		do constructCells();
 
 		return this;
 	}
 
-	method void selectCellAtIdx(int idx) {
-		if (~(mSelected = null)) {
-			do mSelected.setSelected(false);
-		}
+	method void dispose() {
+		do mField.dispose();
+		do mSelected.dispose();
 
-		let mSelected = mField[idx];
+		do Memory.deAlloc(this);
 
-		do mSelected.setSelected(true);
+		return;
+	}
+
+	method void selectCellAtLoc(int x, int y) {
+		var Cell cell;
+		var Array row;
+
+		// TODO: refactor
+		let row = mField[mSelected.getY()];
+		let cell = row[mSelected.getX()];
+
+		do cell.setSelected(false);
+		do cell.draw();
+
+		let row = mField[y];
+		let cell = row[x];
+
+		do cell.setSelected(true);
+		do cell.draw();
+		// end TODO
+
+		do mSelected.setX(x);
+		do mSelected.setY(y);
 
 		return;
 	}
@@ -35,37 +56,17 @@ class GameField {
 		var int j;
 		var int len;
 		var Array row;
-		var Array idxs;
-		var int p, q, r1, r2;
 		var int x, y;
 		var Cell cell;
+		var int total;
+		var int x1, y1;
+		var int x2, y2;
+		var int r1, r2;
+		var Cell c1, c2;
 
-		/** let len = HEIGHT * WIDTH;
-		let idxs = Array.new(len);
-		let i = 0;
-
-		while (i < len) {
-			let idxs[i] = i;
-			let i = i + 1;
-		}
-
-		let i = 0;
-
-		while (i < len) {
-			let r1 = ExtMath.modulo(mRand.getNext(), (i + 1));
-			let r2 = ExtMath.modulo(mRand.getNext(), (len - i)) + (i + 1);
-
-			let p = idxs[r1];
-			let q = idxs[r2];
-
-			let idxs[r1] = q;
-			let idxs[r2] = p;
-
-			let i = i + 1;
-		}
- */
 		let mField = Array.new(HEIGHT);
 		let i = 0;
+		let total = 0;
 
 		while (i < HEIGHT) {
 			let mField[i] = Array.new(WIDTH);
@@ -73,36 +74,77 @@ class GameField {
 			let j = 0;
 
 			while (j < WIDTH) {
-				let row[j] = Cell.new(j, i);
+				let cell = Cell.new(j, i);
+
+				if (total < mMines) {
+					do cell.setHasMine(true);
+				}
+
+				let row[j] = cell;
+
+				let j = j + 1;
+				let total = total + 1;
+			}
+
+			let i = i + 1;
+		}
+
+		let len = WIDTH * HEIGHT;
+
+		let i = len - 1;
+		while (i > 0) {
+			let r1 = ExtMath.modulo(mRand.getNext(), i + 1);
+
+			let y1 = r1 / WIDTH;
+			let x1 = r1 - (y1 * WIDTH);
+
+			let y2 = i / WIDTH;
+			let x2 = i - (y2 * WIDTH);
+
+			let row = mField[y1];
+			let c1 = row[x1];
+
+			let row = mField[y2];
+			let c2 = row[x2];
+
+			let x = c1.getX();
+			let y = c1.getY();
+
+			do c1.setX(c2.getX());
+			do c1.setY(c2.getY());
+
+			do c2.setX(x);
+			do c2.setY(y);
+
+			let row = mField[y1];
+			let row[x1] = c2;
+
+			let row = mField[y2];
+			let row[x2] = c1;
+
+			let i = i - 1;
+		}
+
+		let i = 0;
+
+		while (i < HEIGHT) {
+			let j = 0;
+
+			while (j < WIDTH) {
+				let row = mField[i];
+				let cell = row[j];
+
+				if (cell.hasMine()) {
+					do updateNeighbors(j, i);
+				}
 
 				let j = j + 1;
 			}
 
 			let i = i + 1;
 		}
-/** 
-		let i = 0;
-		while (i < mMines) {
-			let j = idxs[i];
 
-			let y = j / WIDTH;
-			let x = j - (y * WIDTH);
-
-			let row = mField[y];
-			let cell = row[x];
-
-			do cell.setHasMine(true);
-			do updateNeighbors(x, y);
-
-			let i = i + 1;
-		}
-
-		do idxs.dispose();
- */
-		let row = mField[HEIGHT / 2];
-
-		let mSelected = row[WIDTH / 2];
-		do mSelected.setSelected(true);
+		do selectCellAtLoc(WIDTH / 2, HEIGHT / 2);
 
 		return;
 	}
@@ -157,33 +199,75 @@ class GameField {
 		return;
 	}
 
-	method void constructCells() {
-		var int i;
-		var int j;
-		var int x;
-		var int y;
-		var int len;
+	method void open() {
 		var Array row;
 		var Cell cell;
 
-		let len = WIDTH * HEIGHT;
-		let i = 0;
+		let row = mField[mSelected.getY()];
+		let cell = row[mSelected.getX()];
 
-		while (i < mMines) {
-			let j = ExtMath.modulo(mRand.getNext(), len);
+		do cell.open();
+		do cell.draw();
 
-			let y = j / WIDTH;
-			let x = j - (y * WIDTH);
+		return;
+	}
 
-			let row = mField[y];
-			let cell = row[x];
-			
-			if (~(cell.hasMine())) {
-				do cell.setHasMine(true);
-				let i = i + 1;
+	method void flag() {
+		var Array row;
+		var Cell cell;
 
-				do updateNeighbors(x, y);
-			}
+		let row = mField[mSelected.getY()];
+		let cell = row[mSelected.getX()];
+
+		do cell.toggleFlagged();
+		do cell.draw();
+
+		return;
+	}
+
+	method void up() {
+		var int y;
+
+		let y = mSelected.getY() - 1;
+
+		if (y > -1) {
+			do selectCellAtLoc(mSelected.getX(), y);
+		}
+
+		return;
+	}
+
+	method void down() {
+		var int y;
+
+		let y = mSelected.getY() + 1;
+
+		if (y < HEIGHT) {
+			do selectCellAtLoc(mSelected.getX(), y);
+		}
+
+		return;
+	}
+
+	method void left() {
+		var int x;
+
+		let x = mSelected.getX() - 1;
+
+		if (x > -1) {
+			do selectCellAtLoc(x, mSelected.getY());
+		}
+
+		return;
+	}
+
+	method void right() {
+		var int x;
+
+		let x = mSelected.getX() + 1;
+
+		if (x < WIDTH) {
+			do selectCellAtLoc(x, mSelected.getY());
 		}
 
 		return;

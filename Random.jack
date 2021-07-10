@@ -29,6 +29,12 @@ class Random {
 		return this;
 	}
 
+	method void dispose() {
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
 	method void constructValidSeeds() {
 		let VALID_SEEDS_LEN = 21;
 		let VALID_SEEDS = Array.new(VALID_SEEDS_LEN);
@@ -59,9 +65,9 @@ class Random {
 	}
 
 	method void seed(int newSeed) {
-		var int i;
-		let i = ExtMath.modulo(newSeed, VALID_SEEDS_LEN);
-		let mSeed = VALID_SEEDS[i];
+/** 		var int i;
+		let i = ExtMath.modulo(newSeed, VALID_SEEDS_LEN); */
+		let mSeed = ExtMath.modulo(newSeed, mvMod);
 		return;
 	}
 

@@ -1,23 +1,85 @@
 class Cell {
 	static int SCREEN;
+	static Array SELECTED;
+	static Array NOT_SELECTED;
 
 	field int mX;
 	field int mY;
 	field boolean mMine;
 	field boolean mOpen;
 	field boolean mSelected;
+	field boolean mFlagged;
 	field int mNeighborMines;
 
 	constructor Cell new(int x, int y) {
+		if (SELECTED = null) {
+			do constructSELECTED();
+		}
+
+		if (NOT_SELECTED = null) {
+			do constructNOT_SELECTED();
+		}
+
 		let SCREEN = 16384;
 		let mX = x;
 		let mY = y;
 		let mMine = false;
-		let mOpen = true;
+		let mOpen = false;
 		let mSelected = false;
 		let mNeighborMines = 0;
 
 		return this;
+	}
+
+	method void dispose() {
+		do Memory.deAlloc(this);
+		return;
+	}
+
+	method void constructSELECTED() {
+		let SELECTED = Array.new(16);
+		
+		let SELECTED[0] = 0;
+		let SELECTED[1] = 32766;
+		let SELECTED[2] = 16386;
+		let SELECTED[3] = 16386;
+		let SELECTED[4] = 16386;
+		let SELECTED[5] = 16386;
+		let SELECTED[6] = 16386;
+		let SELECTED[7] = 16386;
+		let SELECTED[8] = 16386;
+		let SELECTED[9] = 16386;
+		let SELECTED[10] = 16386;
+		let SELECTED[11] = 16386;
+		let SELECTED[12] = 16386;
+		let SELECTED[13] = 16386;
+		let SELECTED[14] = 32766;
+		let SELECTED[15] = 0;
+		
+		return;
+	}
+
+	method void constructNOT_SELECTED() {
+		let NOT_SELECTED = Array.new(16);
+
+		let NOT_SELECTED[0] = -1;
+		let NOT_SELECTED[1] = -32767;
+		let NOT_SELECTED[2] = -32767;
+		let NOT_SELECTED[3] = -32767;
+		let NOT_SELECTED[4] = -32767;
+		let NOT_SELECTED[5] = -32767;
+		let NOT_SELECTED[6] = -32767;
+		let NOT_SELECTED[7] = -32767;
+		let NOT_SELECTED[8] = -32767;
+		let NOT_SELECTED[9] = -32767;
+		let NOT_SELECTED[10] = -32767;
+		let NOT_SELECTED[11] = -32767;
+		let NOT_SELECTED[12] = -32767;
+		let NOT_SELECTED[13] = -32767;
+		let NOT_SELECTED[14] = -32767;
+		let NOT_SELECTED[15] = -1;
+
+		return;
 	}
 
 	method void setHasMine(boolean mine) {
@@ -39,48 +101,66 @@ class Cell {
 		return;
 	}
 
+	method int getX() {
+		return mX;
+	}
+
+	method int getY() {
+		return mY;
+	}
+
+	method void setX(int x) {
+		let mX = x;
+		return;
+	}
+
+	method void setY(int y) {
+		let mY = y;
+		return;
+	}
+
+	method void toggleFlagged() {
+		let mFlagged = ~mFlagged;
+		return;
+	}
+
+	method void open() {
+		let mOpen = true;
+		return;
+	}
+
 	method void draw() {
 		var int addr;
 		var Array border;
-		let border = Array.new(16);
 
 		if (~mSelected) {
-			let border[0] = -1;
-			let border[1] = -32767;
-			let border[2] = -32767;
-			let border[3] = -32767;
-			let border[4] = -32767;
-			let border[5] = -32767;
-			let border[6] = -32767;
-			let border[7] = -32767;
-			let border[8] = -32767;
-			let border[9] = -32767;
-			let border[10] = -32767;
-			let border[11] = -32767;
-			let border[12] = -32767;
-			let border[13] = -32767;
-			let border[14] = -32767;
-			let border[15] = -1;
+			let border = NOT_SELECTED;
 		} else {
-			let border[0] = 0;
-			let border[1] = 32766;
-			let border[2] = 16386;
-			let border[3] = 16386;
-			let border[4] = 16386;
-			let border[5] = 16386;
-			let border[6] = 16386;
-			let border[7] = 16386;
-			let border[8] = 16386;
-			let border[9] = 16386;
-			let border[10] = 16386;
-			let border[11] = 16386;
-			let border[12] = 16386;
-			let border[13] = 16386;
-			let border[14] = 32766;
-			let border[15] = 0;
+			let border = SELECTED;
 		}
 
 		let addr = SCREEN + (mY * 512) + mX;
+
+		if (mFlagged) {
+			do Memory.poke(addr, 0 | border[0]);
+			do Memory.poke(addr + 32, 0 | border[1]);
+			do Memory.poke(addr + 64, 384 | border[2]);
+			do Memory.poke(addr + 96, 1920 | border[3]);
+			do Memory.poke(addr + 128, 8064 | border[4]);
+			do Memory.poke(addr + 160, 1920 | border[5]);
+			do Memory.poke(addr + 192, 384 | border[6]);
+			do Memory.poke(addr + 224, 384 | border[7]);
+			do Memory.poke(addr + 256, 384 | border[8]);
+			do Memory.poke(addr + 288, 384 | border[9]);
+			do Memory.poke(addr + 320, 384 | border[10]);
+			do Memory.poke(addr + 352, 384 | border[11]);
+			do Memory.poke(addr + 384, 384 | border[12]);
+			do Memory.poke(addr + 416, 384 | border[13]);
+			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
+		}
 
 		if (~(mOpen)) {
 			do Memory.poke(addr, 0 | border[0]);
@@ -99,6 +179,8 @@ class Cell {
 			do Memory.poke(addr + 416, 10922 | border[13]);
 			do Memory.poke(addr + 448, 21844 | border[14]);
 			do Memory.poke(addr + 480, 0 | border[15]);
+
+			return;
 		}
 
 		if (mMine) {
@@ -310,6 +392,7 @@ class Cell {
 
 			return;
 		}
+
 		return;
 	}
 }

@@ -5,6 +5,8 @@ class Main {
 
 		let game = Minesweeper.new();
 		do game.run();
+
+		do game.dispose();
 		
 		return;
 	}

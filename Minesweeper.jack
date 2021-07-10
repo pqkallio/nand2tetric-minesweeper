@@ -1,15 +1,71 @@
 class Minesweeper {
-	field Random rand;
-	field GameField field_;
+	field Random mRand;
+	field GameField mField;
+	field char lastKey;
 
 	constructor Minesweeper new() {
-		let rand = Random.new(3);
-		let field_ = GameField.new(rand, 150);
+		let lastKey = 0;
+		let mRand = Random.new(3);
+		let mField = GameField.new(mRand, 150);
 		return this;
 	}
 
+	method void dispose() {
+		do mField.dispose();
+		do mRand.dispose();
+
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
 	method void run() {
-		do field_.draw();
+		var char key;
+
+		do mField.draw();
+
+		while (true) {
+			let key = Keyboard.keyPressed();
+
+			if (~(key = lastKey)) {
+				let lastKey = key;
+
+				if (~(key = 0)) {
+					if (key = 81) {
+						return;
+					}
+
+					if (key = 32) {
+						do mField.open();
+					}
+
+					if (key = 77) {
+						do mField.flag();
+					}
+
+					if (key = 130) {
+						do mField.left();
+					}
+
+					if (key = 131) {
+						do mField.up();
+					}
+
+					if (key = 132) {
+						do mField.right();
+					}
+
+					if (key = 133) {
+						do mField.down();
+					}
+					
+					if (key = 140) {
+						return;
+					}	
+
+				}
+			}
+		}
 
 		return;
 	}
