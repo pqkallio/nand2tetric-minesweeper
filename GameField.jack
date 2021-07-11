@@ -202,12 +202,61 @@ class GameField {
 	method void open() {
 		var Array row;
 		var Cell cell;
+		var List list;
+		var ListItem item;
+		var int x, y, origX, origY;
+		var boolean isInsider, isOther;
 
 		let row = mField[mSelected.getY()];
 		let cell = row[mSelected.getX()];
 
-		do cell.open();
-		do cell.draw();
+		if (cell.isFlagged()) {
+			return;
+		}
+
+		let list = List.new();
+		do list.append(cell);
+		let item = list.getFirst();
+
+		while (~(item = null)) {
+			let cell = item.getValue();
+
+			if (~(cell.isOpen())) {
+				do cell.open();
+				do cell.draw();
+
+				if (cell.getNeighborMines() = 0) {
+					let origX = cell.getX();
+					let origY = cell.getY();
+
+					let y = origY - 1;
+
+					while (y < (origY + 2)) {
+						let x = origX - 1;
+
+						while (x < (origX + 2)) {
+							let isInsider = insideField(x, y);
+							let isOther = (~(x = origX)) | (~(y = origY));
+
+							if (isInsider & isOther) {
+								let row = mField[y];
+								let cell = row[x];
+
+								do list.append(cell);
+							}
+
+							let x = x + 1;
+						}
+
+						let y = y + 1;
+					}
+				}
+			}
+
+			let item = item.getNext();
+		}
+
+		do list.dispose();
 
 		return;
 	}

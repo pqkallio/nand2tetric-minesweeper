@@ -1,0 +1,35 @@
+class List {
+	field ListItem mFirst;
+	field ListItem mLast;
+
+	constructor List new() {
+		let mFirst = null;
+		let mLast = null;
+		return this;
+	}
+
+	method ListItem getFirst() {
+		return mFirst;
+	}
+
+	method void append(int value) {
+		var ListItem item;
+		if (mFirst = null) {
+			let item = ListItem.new(value);
+			let mFirst = item;
+		} else {
+			do mLast.setNext(value);
+			let item = mLast.getNext();
+		}
+		let mLast = item;
+		return;
+	}
+
+	method void dispose() {
+		if (~(mFirst = null)) {
+			do mFirst.dispose();
+		}
+		do Memory.deAlloc(this);
+		return;
+	}
+}

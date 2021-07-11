@@ -91,6 +91,14 @@ class Cell {
 		return mMine;
 	}
 
+	method boolean isFlagged() {
+		return mFlagged;
+	}
+
+	method int getNeighborMines() {
+		return mNeighborMines;
+	}
+
 	method void addNeighborMines(int n) {
 		let mNeighborMines = (mNeighborMines + n);
 		return;
@@ -129,6 +137,10 @@ class Cell {
 		return;
 	}
 
+	method boolean isOpen() {
+		return mOpen;
+	}
+
 	method void draw() {
 		var int addr;
 		var Array border;
@@ -143,20 +155,20 @@ class Cell {
 
 		if (mFlagged) {
 			do Memory.poke(addr, 0 | border[0]);
-			do Memory.poke(addr + 32, 0 | border[1]);
-			do Memory.poke(addr + 64, 384 | border[2]);
-			do Memory.poke(addr + 96, 1920 | border[3]);
-			do Memory.poke(addr + 128, 8064 | border[4]);
-			do Memory.poke(addr + 160, 1920 | border[5]);
-			do Memory.poke(addr + 192, 384 | border[6]);
-			do Memory.poke(addr + 224, 384 | border[7]);
-			do Memory.poke(addr + 256, 384 | border[8]);
-			do Memory.poke(addr + 288, 384 | border[9]);
-			do Memory.poke(addr + 320, 384 | border[10]);
-			do Memory.poke(addr + 352, 384 | border[11]);
-			do Memory.poke(addr + 384, 384 | border[12]);
-			do Memory.poke(addr + 416, 384 | border[13]);
-			do Memory.poke(addr + 448, 0 | border[14]);
+			do Memory.poke(addr + 32, 10282 | border[1]);
+			do Memory.poke(addr + 64, 20884 | border[2]);
+			do Memory.poke(addr + 96, 1962 | border[3]);
+			do Memory.poke(addr + 128, 24468 | border[4]);
+			do Memory.poke(addr + 160, 1962 | border[5]);
+			do Memory.poke(addr + 192, 20884 | border[6]);
+			do Memory.poke(addr + 224, 10666 | border[7]);
+			do Memory.poke(addr + 256, 21908 | border[8]);
+			do Memory.poke(addr + 288, 10666 | border[9]);
+			do Memory.poke(addr + 320, 21908 | border[10]);
+			do Memory.poke(addr + 352, 10666 | border[11]);
+			do Memory.poke(addr + 384, 21908 | border[12]);
+			do Memory.poke(addr + 416, 10666 | border[13]);
+			do Memory.poke(addr + 448, 21524 | border[14]);
 			do Memory.poke(addr + 480, 0 | border[15]);
 
 			return;

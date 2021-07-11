@@ -1,0 +1,33 @@
+class ListItem {
+	field int mValue;
+	field ListItem mNext;
+
+	constructor ListItem new(int value) {
+		let mValue = value;
+		let mNext = null;
+		return this;
+	}
+
+	method int getValue() {
+		return mValue;
+	}
+
+	method void setNext(int value) {
+		var ListItem next;
+		let next = ListItem.new(value);
+		let mNext = next;
+		return;
+	}
+
+	method ListItem getNext() {
+		return mNext;
+	}
+
+	method void dispose() {
+		if (~(mNext = null)) {
+			do mNext.dispose();
+		}
+		do Memory.deAlloc(this);
+		return;
+	}
+}
