@@ -21,6 +21,7 @@ class Minesweeper {
 
 	method void run() {
 		var char key;
+		var boolean continue;
 
 		do mField.draw();
 
@@ -36,7 +37,11 @@ class Minesweeper {
 					}
 
 					if (key = 32) {
-						do mField.open();
+						let continue = mField.open();
+
+						if (~continue) {
+							return;
+						}
 					}
 
 					if (key = 77) {

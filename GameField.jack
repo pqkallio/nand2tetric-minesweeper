@@ -201,18 +201,51 @@ class GameField {
 		return;
 	}
 
-	method void open() {
+	method boolean open() {
 		var Array row;
 		var Cell cell;
 		var List list;
 		var int x, y, origX, origY;
 		var boolean isInsider, isOther;
+		var int i, j;
 
 		let row = mField[mSelected.getY()];
 		let cell = row[mSelected.getX()];
 
 		if (cell.isFlagged()) {
-			return;
+			return true;
+		}
+
+		if (cell.hasMine()) {
+			do cell.open();
+			do cell.draw();
+
+			let i = 0;
+
+			while (i < HEIGHT) {
+				let j = 0;
+
+				while (j < WIDTH) {
+					let row = mField[i];
+					let cell = row[j];
+
+					if (cell.hasMine() & (~cell.isOpen()) & (~cell.isFlagged())) {
+						do cell.open();
+						do cell.draw();
+					}
+
+					if ((~cell.hasMine()) & cell.isFlagged()) {
+						do cell.open();
+						do cell.draw();
+					}
+
+					let j = j + 1;
+				}
+
+				let i = i + 1;
+			}
+
+			return false;
 		}
 
 		let list = List.new();
@@ -256,7 +289,7 @@ class GameField {
 
 		do list.dispose();
 
-		return;
+		return true;
 	}
 
 	method void flag() {

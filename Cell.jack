@@ -88,6 +88,13 @@ class Cell {
 		let y = mY + 1;
 
 		if (mFlagged) {
+			if (mOpen & (~mMine)) {
+				do SpriteRenderer.drawCross(mX, y);
+				do SpriteRenderer.drawBorder(mX, y, mSelected);
+
+				return;
+			}
+
 			do SpriteRenderer.drawFlag(mX, y);
 			do SpriteRenderer.drawBorder(mX, y, mSelected);
 

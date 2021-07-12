@@ -362,4 +362,29 @@ class SpriteRenderer {
 
 		return;
 	}
+
+	function void drawCross(int x , int y) {
+		var int addr;
+
+		let addr = SpriteRenderer.getAddr(x, y);
+
+		do Memory.poke(addr, 0);
+		do Memory.poke(addr + 32, 0);
+		do Memory.poke(addr + 64, 4104);
+		do Memory.poke(addr + 96, 14364);
+		do Memory.poke(addr + 128, 7224);
+		do Memory.poke(addr + 160, 3696);
+		do Memory.poke(addr + 192, 2016);
+		do Memory.poke(addr + 224, 960);
+		do Memory.poke(addr + 256, 960);
+		do Memory.poke(addr + 288, 2016);
+		do Memory.poke(addr + 320, 3696);
+		do Memory.poke(addr + 352, 7224);
+		do Memory.poke(addr + 384, 14364);
+		do Memory.poke(addr + 416, 4104);
+		do Memory.poke(addr + 448, 0);
+		do Memory.poke(addr + 480, 0);
+
+		return;
+	}
 }
