@@ -6,7 +6,7 @@ class Minesweeper {
 	constructor Minesweeper new() {
 		let lastKey = 0;
 		let mRand = Random.new(3);
-		let mField = GameField.new(mRand, 150);
+		let mField = GameField.new(mRand, 40);
 		return this;
 	}
 

@@ -1,15 +1,37 @@
 class List {
 	field ListItem mFirst;
 	field ListItem mLast;
+	field int mSize;
 
 	constructor List new() {
 		let mFirst = null;
 		let mLast = null;
+		let mSize = 0;
 		return this;
+	}
+
+	method int getSize() {
+		return mSize;
 	}
 
 	method ListItem getFirst() {
 		return mFirst;
+	}
+
+	method int pop() {
+		var ListItem nextFirst;
+		var int value;
+
+		let value = mFirst.getValue();
+		let nextFirst = mFirst.getNext();
+
+		do mFirst.detach();
+		do mFirst.dispose();
+
+		let mFirst = nextFirst;
+		let mSize = mSize - 1;
+
+		return value;
 	}
 
 	method void append(int value) {
@@ -22,6 +44,7 @@ class List {
 			let item = mLast.getNext();
 		}
 		let mLast = item;
+		let mSize = mSize + 1;
 		return;
 	}
 

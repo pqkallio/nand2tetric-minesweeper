@@ -1,0 +1,51 @@
+class Header {
+	static int SCREEN;
+	field int mMines;
+
+	constructor Header new(int mines) {
+		let SCREEN = 16384;
+		let mMines = mines;
+
+		return this;
+	}
+
+	method void update(int minesToAdd) {
+		let mMines = mMines + minesToAdd;
+		do drawMineCount();
+		
+		return;
+	}
+
+	method void drawMineCount() {
+		var int x, i, d, div;
+
+		let x = 17;
+
+		let i = 2;
+
+		while (i > -1) {
+			let div = ExtMath.pow(10, i);
+			let d = ExtMath.modulo(mMines / div, 10);
+
+			do SpriteRenderer.drawNumber(x, 0, d);
+
+			let i = i - 1;
+			let x = x + 1;
+		}
+
+		return;
+	}
+
+	method void draw() {
+		do SpriteRenderer.drawMine(14, 0);
+		do drawMineCount();
+
+		return;
+	}
+
+	method void dispose() {
+		do Memory.deAlloc(this);
+
+		return;
+	}
+}

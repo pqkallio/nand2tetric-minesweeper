@@ -1,0 +1,365 @@
+class SpriteRenderer {
+	function int getAddr(int x, int y) {
+		return 16384 + (y * 512) + x;
+	}
+
+	function void drawBorder(int x, int y, boolean selected) {
+		var int addr;
+
+		let addr = SpriteRenderer.getAddr(x, y);
+
+		if (selected) {
+			do Memory.poke(addr, Memory.peek(addr) | 0);
+			do Memory.poke(addr + 32, Memory.peek(addr + 32) | 32766);
+			do Memory.poke(addr + 64, Memory.peek(addr + 64) | 16386);
+			do Memory.poke(addr + 96, Memory.peek(addr + 96) | 16386);
+			do Memory.poke(addr + 128, Memory.peek(addr + 128) | 16386);
+			do Memory.poke(addr + 160, Memory.peek(addr + 160) | 16386);
+			do Memory.poke(addr + 192, Memory.peek(addr + 192) | 16386);
+			do Memory.poke(addr + 224, Memory.peek(addr + 224) | 16386);
+			do Memory.poke(addr + 256, Memory.peek(addr + 256) | 16386);
+			do Memory.poke(addr + 288, Memory.peek(addr + 288) | 16386);
+			do Memory.poke(addr + 320, Memory.peek(addr + 320) | 16386);
+			do Memory.poke(addr + 352, Memory.peek(addr + 352) | 16386);
+			do Memory.poke(addr + 384, Memory.peek(addr + 384) | 16386);
+			do Memory.poke(addr + 416, Memory.peek(addr + 416) | 16386);
+			do Memory.poke(addr + 448, Memory.peek(addr + 448) | 32766);
+			do Memory.poke(addr + 480, Memory.peek(addr + 480) | 0);
+		} else {
+			do Memory.poke(addr, Memory.peek(addr) | -1);
+			do Memory.poke(addr + 32, Memory.peek(addr + 32) | -32767);
+			do Memory.poke(addr + 64, Memory.peek(addr + 64) | -32767);
+			do Memory.poke(addr + 96, Memory.peek(addr + 96) | -32767);
+			do Memory.poke(addr + 128, Memory.peek(addr + 128) | -32767);
+			do Memory.poke(addr + 160, Memory.peek(addr + 160) | -32767);
+			do Memory.poke(addr + 192, Memory.peek(addr + 192) | -32767);
+			do Memory.poke(addr + 224, Memory.peek(addr + 224) | -32767);
+			do Memory.poke(addr + 256, Memory.peek(addr + 256) | -32767);
+			do Memory.poke(addr + 288, Memory.peek(addr + 288) | -32767);
+			do Memory.poke(addr + 320, Memory.peek(addr + 320) | -32767);
+			do Memory.poke(addr + 352, Memory.peek(addr + 352) | -32767);
+			do Memory.poke(addr + 384, Memory.peek(addr + 384) | -32767);
+			do Memory.poke(addr + 416, Memory.peek(addr + 416) | -32767);
+			do Memory.poke(addr + 448, Memory.peek(addr + 448) | -32767);
+			do Memory.poke(addr + 480, Memory.peek(addr + 480) | -1);
+		}
+
+		return;
+	}
+	
+	function void drawEmpty(int x, int y) {
+		var int addr;
+
+		let addr = SpriteRenderer.getAddr(x, y);
+
+		do Memory.poke(addr, 0);
+		do Memory.poke(addr + 32, 0);
+		do Memory.poke(addr + 64, 0);
+		do Memory.poke(addr + 96, 0);
+		do Memory.poke(addr + 128, 0);
+		do Memory.poke(addr + 160, 0);
+		do Memory.poke(addr + 192, 0);
+		do Memory.poke(addr + 224, 0);
+		do Memory.poke(addr + 256, 0);
+		do Memory.poke(addr + 288, 0);
+		do Memory.poke(addr + 320, 0);
+		do Memory.poke(addr + 352, 0);
+		do Memory.poke(addr + 384, 0);
+		do Memory.poke(addr + 416, 0);
+		do Memory.poke(addr + 448, 0);
+		do Memory.poke(addr + 480, 0);
+
+		return;
+	}
+
+	function void drawNumber(int x, int y, int d) {
+		var int addr;
+
+		let addr = SpriteRenderer.getAddr(x, y);
+
+		if (d = 0) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 960);
+			do Memory.poke(addr + 96, 1632);
+			do Memory.poke(addr + 128, 3120);
+			do Memory.poke(addr + 160, 3120);
+			do Memory.poke(addr + 192, 3120);
+			do Memory.poke(addr + 224, 3504);
+			do Memory.poke(addr + 256, 3504);
+			do Memory.poke(addr + 288, 3120);
+			do Memory.poke(addr + 320, 3120);
+			do Memory.poke(addr + 352, 3120);
+			do Memory.poke(addr + 384, 1632);
+			do Memory.poke(addr + 416, 960);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 1) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 384);
+			do Memory.poke(addr + 96, 448);
+			do Memory.poke(addr + 128, 480);
+			do Memory.poke(addr + 160, 384);
+			do Memory.poke(addr + 192, 384);
+			do Memory.poke(addr + 224, 384);
+			do Memory.poke(addr + 256, 384);
+			do Memory.poke(addr + 288, 384);
+			do Memory.poke(addr + 320, 384);
+			do Memory.poke(addr + 352, 384);
+			do Memory.poke(addr + 384, 384);
+			do Memory.poke(addr + 416, 2016);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 2) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 960);
+			do Memory.poke(addr + 96, 1632);
+			do Memory.poke(addr + 128, 3120);
+			do Memory.poke(addr + 160, 3120);
+			do Memory.poke(addr + 192, 3072);
+			do Memory.poke(addr + 224, 3072);
+			do Memory.poke(addr + 256, 1536);
+			do Memory.poke(addr + 288, 768);
+			do Memory.poke(addr + 320, 384);
+			do Memory.poke(addr + 352, 192);
+			do Memory.poke(addr + 384, 96);
+			do Memory.poke(addr + 416, 4080);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 3) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 4080);
+			do Memory.poke(addr + 96, 1536);
+			do Memory.poke(addr + 128, 768);
+			do Memory.poke(addr + 160, 384);
+			do Memory.poke(addr + 192, 992);
+			do Memory.poke(addr + 224, 1536);
+			do Memory.poke(addr + 256, 3072);
+			do Memory.poke(addr + 288, 3072);
+			do Memory.poke(addr + 320, 3072);
+			do Memory.poke(addr + 352, 3120);
+			do Memory.poke(addr + 384, 1632);
+			do Memory.poke(addr + 416, 960);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 4) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 192);
+			do Memory.poke(addr + 96, 192);
+			do Memory.poke(addr + 128, 96);
+			do Memory.poke(addr + 160, 96);
+			do Memory.poke(addr + 192, 48);
+			do Memory.poke(addr + 224, 432);
+			do Memory.poke(addr + 256, 4080);
+			do Memory.poke(addr + 288, 384);
+			do Memory.poke(addr + 320, 384);
+			do Memory.poke(addr + 352, 384);
+			do Memory.poke(addr + 384, 384);
+			do Memory.poke(addr + 416, 384);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 5) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 2032);
+			do Memory.poke(addr + 96, 48);
+			do Memory.poke(addr + 128, 48);
+			do Memory.poke(addr + 160, 48);
+			do Memory.poke(addr + 192, 1008);
+			do Memory.poke(addr + 224, 1536);
+			do Memory.poke(addr + 256, 3072);
+			do Memory.poke(addr + 288, 3072);
+			do Memory.poke(addr + 320, 3072);
+			do Memory.poke(addr + 352, 3072);
+			do Memory.poke(addr + 384, 1584);
+			do Memory.poke(addr + 416, 992);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 6) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 960);
+			do Memory.poke(addr + 96, 1632);
+			do Memory.poke(addr + 128, 3120);
+			do Memory.poke(addr + 160, 48);
+			do Memory.poke(addr + 192, 48);
+			do Memory.poke(addr + 224, 1008);
+			do Memory.poke(addr + 256, 1648);
+			do Memory.poke(addr + 288, 3120);
+			do Memory.poke(addr + 320, 3120);
+			do Memory.poke(addr + 352, 3120);
+			do Memory.poke(addr + 384, 1632);
+			do Memory.poke(addr + 416, 960);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 7) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 4080);
+			do Memory.poke(addr + 96, 3072);
+			do Memory.poke(addr + 128, 1536);
+			do Memory.poke(addr + 160, 1536);
+			do Memory.poke(addr + 192, 768);
+			do Memory.poke(addr + 224, 768);
+			do Memory.poke(addr + 256, 384);
+			do Memory.poke(addr + 288, 384);
+			do Memory.poke(addr + 320, 192);
+			do Memory.poke(addr + 352, 192);
+			do Memory.poke(addr + 384, 96);
+			do Memory.poke(addr + 416, 96);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 8) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 960);
+			do Memory.poke(addr + 96, 1632);
+			do Memory.poke(addr + 128, 3120);
+			do Memory.poke(addr + 160, 3120);
+			do Memory.poke(addr + 192, 1632);
+			do Memory.poke(addr + 224, 960);
+			do Memory.poke(addr + 256, 1632);
+			do Memory.poke(addr + 288, 3120);
+			do Memory.poke(addr + 320, 3120);
+			do Memory.poke(addr + 352, 3120);
+			do Memory.poke(addr + 384, 1632);
+			do Memory.poke(addr + 416, 960);
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+
+			return;
+		}
+
+		if (d = 9) {
+			do Memory.poke(addr, 0);
+			do Memory.poke(addr + 32, 0);
+			do Memory.poke(addr + 64, 960);
+			do Memory.poke(addr + 96, 1632);
+			do Memory.poke(addr + 128, 3120);
+			do Memory.poke(addr + 160, 3120);
+			do Memory.poke(addr + 192, 3120);
+			do Memory.poke(addr + 224, 3680);
+			do Memory.poke(addr + 256, 4032);
+			do Memory.poke(addr + 288, 3072);
+			do Memory.poke(addr + 320, 3072);
+			do Memory.poke(addr + 352, 3120);
+			do Memory.poke(addr + 384, 1632);
+			do Memory.poke(addr + 416, 960 );
+			do Memory.poke(addr + 448, 0);
+			do Memory.poke(addr + 480, 0);
+		}
+
+		return;
+	}
+
+	function void drawMine(int x, int y) {
+		var int addr;
+
+		let addr = SpriteRenderer.getAddr(x, y);
+
+		do Memory.poke(addr, 0);
+		do Memory.poke(addr + 32, 0);
+		do Memory.poke(addr + 64, 384);
+		do Memory.poke(addr + 96, 2448);
+		do Memory.poke(addr + 128, 7608);
+		do Memory.poke(addr + 160, 4080);
+		do Memory.poke(addr + 192, 2016);
+		do Memory.poke(addr + 224, 16380);
+		do Memory.poke(addr + 256, 16380);
+		do Memory.poke(addr + 288, 2016);
+		do Memory.poke(addr + 320, 4080);
+		do Memory.poke(addr + 352, 7608);
+		do Memory.poke(addr + 384, 2448);
+		do Memory.poke(addr + 416, 384);
+		do Memory.poke(addr + 448, 0);
+		do Memory.poke(addr + 480, 0);
+
+		return;
+	}
+
+	function void drawFlag(int x, int y) {
+		var int addr;
+
+		let addr = SpriteRenderer.getAddr(x, y);
+
+		do Memory.poke(addr, 0);
+		do Memory.poke(addr + 32, 10282);
+		do Memory.poke(addr + 64, 20884);
+		do Memory.poke(addr + 96, 1962);
+		do Memory.poke(addr + 128, 24468);
+		do Memory.poke(addr + 160, 1962);
+		do Memory.poke(addr + 192, 20884);
+		do Memory.poke(addr + 224, 10666);
+		do Memory.poke(addr + 256, 21908);
+		do Memory.poke(addr + 288, 10666);
+		do Memory.poke(addr + 320, 21908);
+		do Memory.poke(addr + 352, 10666);
+		do Memory.poke(addr + 384, 21908);
+		do Memory.poke(addr + 416, 10666);
+		do Memory.poke(addr + 448, 21524);
+		do Memory.poke(addr + 480, 0);
+
+		return;
+	}
+
+	function void drawClosed(int x , int y) {
+		var int addr;
+
+		let addr = SpriteRenderer.getAddr(x, y);
+
+		do Memory.poke(addr, 0);
+		do Memory.poke(addr + 32, 10922);
+		do Memory.poke(addr + 64, 21844);
+		do Memory.poke(addr + 96, 10922);
+		do Memory.poke(addr + 128, 21844);
+		do Memory.poke(addr + 160, 10922);
+		do Memory.poke(addr + 192, 21844);
+		do Memory.poke(addr + 224, 10922);
+		do Memory.poke(addr + 256, 21844);
+		do Memory.poke(addr + 288, 10922);
+		do Memory.poke(addr + 320, 21844);
+		do Memory.poke(addr + 352, 10922);
+		do Memory.poke(addr + 384, 21844);
+		do Memory.poke(addr + 416, 10922);
+		do Memory.poke(addr + 448, 21844);
+		do Memory.poke(addr + 480, 0);
+
+		return;
+	}
+}

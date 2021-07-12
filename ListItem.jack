@@ -23,6 +23,11 @@ class ListItem {
 		return mNext;
 	}
 
+	method void detach() {
+		let mNext = null;
+		return;
+	}
+
 	method void dispose() {
 		if (~(mNext = null)) {
 			do mNext.dispose();

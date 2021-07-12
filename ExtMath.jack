@@ -15,4 +15,22 @@ class ExtMath {
 
 		return z;
 	}
+
+	function int pow(int x, int y) {
+		var int prod;
+
+		if (y < 0) {
+			return 0;
+		}
+
+		let prod = 1;
+
+		while (y > 0) {
+			let prod = prod * x;
+
+			let y = y - 1;
+		}
+
+		return prod;
+	}
 }

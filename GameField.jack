@@ -5,13 +5,15 @@ class GameField {
 	field int WIDTH;
 	field int HEIGHT;
 	field Coord2D mSelected;
+	field Header mHeader;
 
 	constructor GameField new(Random rand, int mines) {
 		let WIDTH = 32;
-		let HEIGHT = 16;
+		let HEIGHT = 15;
 		let mRand = rand;
 		let mMines = mines;
 		let mSelected = Coord2D.new(0, 0);
+		let mHeader = Header.new(mines);
 
 		do constructField();
 
@@ -150,11 +152,11 @@ class GameField {
 	}
 
 	method boolean insideField(int x, int y) {
-		if ((x < 0) | (x > 31)) {
+		if ((x < 0) | (x > (WIDTH - 1))) {
 			return false;
 		}
 
-		if ((y < 0) | (y > 15)) {
+		if ((y < 0) | (y > (HEIGHT - 1))) {
 			return false;
 		}
 
@@ -203,7 +205,6 @@ class GameField {
 		var Array row;
 		var Cell cell;
 		var List list;
-		var ListItem item;
 		var int x, y, origX, origY;
 		var boolean isInsider, isOther;
 
@@ -216,10 +217,9 @@ class GameField {
 
 		let list = List.new();
 		do list.append(cell);
-		let item = list.getFirst();
 
-		while (~(item = null)) {
-			let cell = item.getValue();
+		while (~(list.getSize() = 0)) {
+			let cell = list.pop();
 
 			if (~(cell.isOpen())) {
 				do cell.open();
@@ -252,8 +252,6 @@ class GameField {
 					}
 				}
 			}
-
-			let item = item.getNext();
 		}
 
 		do list.dispose();
@@ -268,8 +266,18 @@ class GameField {
 		let row = mField[mSelected.getY()];
 		let cell = row[mSelected.getX()];
 
+		if (cell.isOpen()) {
+			return;
+		}
+
 		do cell.toggleFlagged();
 		do cell.draw();
+
+		if (cell.isFlagged()) {
+			do mHeader.update(-1);
+		} else {
+			do mHeader.update(1);
+		}
 
 		return;
 	}
@@ -327,6 +335,8 @@ class GameField {
 		var Array row;
 		var int i;
 		var int j;
+
+		do mHeader.draw();
 
 		let i = 0;
 
