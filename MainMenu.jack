@@ -1,0 +1,79 @@
+class MainMenu {
+	static int NEW_GAME;
+	static int INSTRUCTIONS;
+
+	field int mCounter;
+	field MenuItem mNewGame;
+	field MenuItem mInstructions;
+	field MenuItem mCurrentItem;
+	field char lastKey;
+
+	constructor MainMenu new() {
+		let NEW_GAME = 0;
+		let INSTRUCTIONS = 1;
+
+		do Screen.clearScreen();
+		do printTitle();
+
+		let mCounter = 0;
+		let lastKey = 0;
+
+		let mNewGame = MenuItem.new("New Game", NEW_GAME, 12, null, null);
+		let mInstructions = MenuItem.new("Instructions", INSTRUCTIONS, 14, mNewGame, mNewGame);
+		do mNewGame.setNext(mInstructions);
+		do mNewGame.setPrev(mInstructions);
+
+		let mCurrentItem = mNewGame;
+		do mCurrentItem.focus();
+
+		return this;
+	}
+
+	method int run() {
+		var char key;
+
+		while (true) {
+			let key = Keyboard.keyPressed();
+
+			if (~(key = lastKey)) {
+				if (~(key = 0)) {
+					if (key = 131) {
+						let mCurrentItem = mCurrentItem.travelToPrev();
+					}
+
+					if (key = 133) {
+						let mCurrentItem = mCurrentItem.travelToNext();
+					}
+
+					if (key = 32) {
+						return mCurrentItem.select();
+					}
+				}
+
+				let lastKey = key;
+			}
+
+			let mCounter = mCounter + 1;
+		}
+
+		return NEW_GAME;
+	}
+
+	method int getCounterValue() {
+		return mCounter;
+	}
+
+	method void printTitle() {
+		do TextRenderer.printCentered("MINESWEEPER", 9);
+
+		return;
+	}
+
+	method void dispose() {
+		do mNewGame.dispose();
+		do mInstructions.dispose();
+		do Memory.deAlloc(this);
+
+		return;
+	}
+}

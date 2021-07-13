@@ -2,6 +2,8 @@ class GameField {
 	field Array mField;
 	field Random mRand;
 	field int mMines;
+	field int mMinesFound;
+	field int mFalsePositives;
 	field int WIDTH;
 	field int HEIGHT;
 	field Coord2D mSelected;
@@ -12,8 +14,10 @@ class GameField {
 		let HEIGHT = 15;
 		let mRand = rand;
 		let mMines = mines;
+		let mMinesFound = 0;
 		let mSelected = Coord2D.new(0, 0);
 		let mHeader = Header.new(mines);
+		let mFalsePositives = 0;
 
 		do constructField();
 
@@ -219,6 +223,9 @@ class GameField {
 		if (cell.hasMine()) {
 			do cell.open();
 			do cell.draw();
+			do SpriteRenderer.clearRow(0);
+			do Output.moveCursor(0, 28);
+			do Output.printString("YOU LOST");
 
 			let i = 0;
 
@@ -308,8 +315,28 @@ class GameField {
 
 		if (cell.isFlagged()) {
 			do mHeader.update(-1);
+
+			if (~cell.hasMine()) {
+				let mFalsePositives = mFalsePositives + 1;
+			} else {
+				let mMinesFound = mMinesFound + 1;
+			}
+
+			if ((mMines = mMinesFound) & (mFalsePositives = 0)) {
+				do SpriteRenderer.clearRow(0);
+				do Output.moveCursor(0, 28);
+				do Output.printString("YOU WON!");
+
+				return;
+			}
 		} else {
 			do mHeader.update(1);
+
+			if (~cell.hasMine()) {
+				let mFalsePositives = mFalsePositives - 1;
+			} else {
+				let mMinesFound = mMinesFound - 1;
+			}
 		}
 
 		return;

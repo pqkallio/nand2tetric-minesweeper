@@ -1,18 +1,20 @@
 class Minesweeper {
 	field Random mRand;
 	field GameField mField;
+	field MainMenu mMainMenu;
 	field char lastKey;
 
 	constructor Minesweeper new() {
 		let lastKey = 0;
 		let mRand = Random.new(3);
-		let mField = GameField.new(mRand, 40);
+		let mMainMenu = MainMenu.new();
 		return this;
 	}
 
 	method void dispose() {
 		do mField.dispose();
 		do mRand.dispose();
+		do mMainMenu.dispose();
 
 		do Memory.deAlloc(this);
 
@@ -22,7 +24,17 @@ class Minesweeper {
 	method void run() {
 		var char key;
 		var boolean continue;
+		var int transition;
+		var int seed;
 
+		let transition = mMainMenu.run();
+
+		do TextRenderer.loadScreen();
+
+		let seed = mMainMenu.getCounterValue();
+		do mRand.seed(seed);
+
+		let mField = GameField.new(mRand, 30);
 		do mField.draw();
 
 		while (true) {
@@ -44,7 +56,7 @@ class Minesweeper {
 						}
 					}
 
-					if (key = 77) {
+					if (key = 70) {
 						do mField.flag();
 					}
 

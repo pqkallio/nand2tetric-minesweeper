@@ -387,4 +387,20 @@ class SpriteRenderer {
 
 		return;
 	}
+
+	function void clearRow(int y) {
+		var int addr;
+		var int upto;
+
+		let addr = SpriteRenderer.getAddr(0, y);
+		let upto = addr + 512;
+
+		while (addr < upto) {
+			do Memory.poke(addr, 0);
+
+			let addr = addr + 1;
+		}
+
+		return;
+	}
 }

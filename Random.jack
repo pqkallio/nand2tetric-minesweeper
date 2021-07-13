@@ -1,7 +1,4 @@
 class Random {
-	static Array VALID_SEEDS;
-	static int VALID_SEEDS_LEN;
-
 	field int mSeed;
 	field int mwa;
 	field int mwMod;
@@ -12,10 +9,6 @@ class Random {
 	field int mvMod;
 	
 	constructor Random new(int newSeed) {
-		var int i;
-
-		do constructValidSeeds();
-
 		let mwa = 157;
 		let mwMod = 32363;
 		let mxa = 146;
@@ -35,38 +28,7 @@ class Random {
 		return;
 	}
 
-	method void constructValidSeeds() {
-		let VALID_SEEDS_LEN = 21;
-		let VALID_SEEDS = Array.new(VALID_SEEDS_LEN);
-
-		let VALID_SEEDS[0] = 1;
-		let VALID_SEEDS[1] = 8;
-		let VALID_SEEDS[2] = 9;
-		let VALID_SEEDS[3] = 10;
-		let VALID_SEEDS[4] = 11;
-		let VALID_SEEDS[5] = 12;
-		let VALID_SEEDS[6] = 13;
-		let VALID_SEEDS[7] = 14;
-		let VALID_SEEDS[8] = 18;
-		let VALID_SEEDS[9] = 19;
-		let VALID_SEEDS[10] = 21;
-		let VALID_SEEDS[11] = 23;
-		let VALID_SEEDS[12] = 24;
-		let VALID_SEEDS[13] = 25;
-		let VALID_SEEDS[14] = 27;
-		let VALID_SEEDS[15] = 28;
-		let VALID_SEEDS[16] = 29;
-		let VALID_SEEDS[17] = 30;
-		let VALID_SEEDS[18] = 31;
-		let VALID_SEEDS[19] = 32;
-		let VALID_SEEDS[20] = 34;
-
-		return;
-	}
-
 	method void seed(int newSeed) {
-/** 		var int i;
-		let i = ExtMath.modulo(newSeed, VALID_SEEDS_LEN); */
 		let mSeed = ExtMath.modulo(newSeed, mvMod);
 		return;
 	}

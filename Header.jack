@@ -17,7 +17,13 @@ class Header {
 	}
 
 	method void drawMineCount() {
-		var int x, i, d, div;
+		var int x, i, d, div, mines;
+
+		let mines = mMines;
+
+		if (mines < 0) {
+			let mines = 0;
+		}
 
 		let x = 17;
 
@@ -25,7 +31,7 @@ class Header {
 
 		while (i > -1) {
 			let div = ExtMath.pow(10, i);
-			let d = ExtMath.modulo(mMines / div, 10);
+			let d = ExtMath.modulo(mines / div, 10);
 
 			do SpriteRenderer.drawNumber(x, 0, d);
 

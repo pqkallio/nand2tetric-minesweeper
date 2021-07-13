@@ -1,0 +1,83 @@
+class MenuItem {
+	field MenuItem mNext;
+	field MenuItem mPrev;
+	field String mStr;
+	field String mStrSel;
+	field int mSelection;
+	field int mRow;
+
+	constructor MenuItem new(String str, int selection, int row, MenuItem prev, MenuItem next) {
+		var int i;
+
+		let mStr = str;
+		let mPrev = prev;
+		let mNext = next;
+		let mSelection = selection;
+		let mRow = row;
+
+		let mStrSel = String.new(str.length() + 6);
+		let mStrSel = mStrSel.appendChar(62);
+		let mStrSel = mStrSel.appendChar(62);
+		let mStrSel = mStrSel.appendChar(32);
+
+		let i = 0;
+
+		while (i < str.length()) {
+			let mStrSel = mStrSel.appendChar(str.charAt(i));
+			let i = i + 1;
+		}
+
+		let mStrSel = mStrSel.appendChar(32);
+		let mStrSel = mStrSel.appendChar(60);
+		let mStrSel = mStrSel.appendChar(60);
+
+		do blur();
+
+		return this;
+	}
+
+	method void dispose() {
+		do mStrSel.dispose();
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+	method MenuItem travelToNext() {
+		do blur();
+		do mNext.focus();
+
+		return mNext;
+	}
+
+	method MenuItem travelToPrev() {
+		do blur();
+		do mPrev.focus();
+
+		return mPrev;
+	}
+
+	method void setNext(MenuItem next) {
+		let mNext = next;
+		return;
+	}
+
+	method void setPrev(MenuItem prev) {
+		let mPrev = prev;
+		return;
+	}
+
+	method int select() {
+		return mSelection;
+	}
+
+	method void focus() {
+		do TextRenderer.printCentered(mStrSel, mRow);
+		return;
+	}
+
+	method void blur() {
+		do TextRenderer.printCentered(mStr, mRow);
+		return;
+	}
+}

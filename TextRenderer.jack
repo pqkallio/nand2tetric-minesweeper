@@ -1,0 +1,26 @@
+class TextRenderer {
+	function void printCentered(String str, int row) {
+		var int offset;
+
+		if (str.length() > 64) {
+			return;
+		}
+
+		let offset = (64 - str.length()) / 2;
+
+		do Output.moveCursor(row, 0);
+		do Output.printString("                                                                ");
+		do Output.moveCursor(row, offset);
+		do Output.printString(str);
+
+		return;
+	}
+
+	function void loadScreen() {
+		do Screen.clearScreen();
+
+		do TextRenderer.printCentered("Loading...", 23 / 2);
+
+		return;
+	}
+}
