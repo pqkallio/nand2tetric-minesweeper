@@ -1,0 +1,73 @@
+class NewGameMenu {
+	field MenuItem mEasy;
+	field MenuItem mMedium;
+	field MenuItem mHard;
+	field MenuItem mCurrentItem;
+	field char lastKey;
+
+	constructor NewGameMenu new() {
+		let lastKey = 0;
+
+		let mEasy = MenuItem.new("Easy", 50, 14, null, null);
+		let mMedium = MenuItem.new("Medium", 100, 16, mEasy, null);
+		let mHard = MenuItem.new("Hard", 150, 18, mMedium, mEasy);
+
+		do mMedium.setNext(mHard);
+		do mEasy.setPrev(mHard);
+		do mEasy.setNext(mMedium);
+
+		return this;
+	}
+
+	method void dispose() {
+		do mEasy.dispose();
+		do mMedium.dispose();
+		do mHard.dispose();
+
+		do Memory.deAlloc(this);
+
+		return;
+	}
+
+	method int run() {
+		var char key;
+
+		do Screen.clearScreen();
+		do TextRenderer.printTitle();
+		do TextRenderer.printCentered("Difficulty:", 12);
+
+		if (mCurrentItem = null) {
+			let mCurrentItem = mEasy;
+		}
+
+		do mEasy.blur();
+		do mMedium.blur();
+		do mHard.blur();
+
+		do mCurrentItem.focus();
+
+		while (true) {
+			let key = Keyboard.keyPressed();
+
+			if (~(key = lastKey)) {
+				if (~(key = 0)) {
+					if (key = 131) {
+						let mCurrentItem = mCurrentItem.travelToPrev();
+					}
+
+					if (key = 133) {
+						let mCurrentItem = mCurrentItem.travelToNext();
+					}
+
+					if (key = 32) {
+						return mCurrentItem.select();
+					}
+				}
+
+				let lastKey = key;
+			}
+		}
+
+		return 50;
+	}
+}

@@ -12,9 +12,6 @@ class MainMenu {
 		let NEW_GAME = 0;
 		let INSTRUCTIONS = 1;
 
-		do Screen.clearScreen();
-		do printTitle();
-
 		let mCounter = 0;
 		let lastKey = 0;
 
@@ -29,8 +26,23 @@ class MainMenu {
 		return this;
 	}
 
+	function int newGame() {
+		return NEW_GAME;
+	}
+
 	method int run() {
 		var char key;
+
+		do Screen.clearScreen();
+		do TextRenderer.printTitle();
+
+		if (mCurrentItem = null) {
+			let mCurrentItem = mNewGame;
+		}
+
+		do mNewGame.blur();
+		do mInstructions.blur();
+		do mCurrentItem.focus();
 
 		while (true) {
 			let key = Keyboard.keyPressed();
@@ -61,12 +73,6 @@ class MainMenu {
 
 	method int getCounterValue() {
 		return mCounter;
-	}
-
-	method void printTitle() {
-		do TextRenderer.printCentered("MINESWEEPER", 9);
-
-		return;
 	}
 
 	method void dispose() {

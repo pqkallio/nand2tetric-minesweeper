@@ -23,4 +23,11 @@ class TextRenderer {
 
 		return;
 	}
+
+	function void printTitle() {
+		do TextRenderer.printCentered("MINESWEEPER", 9);
+
+		return;
+	}
+
 }
