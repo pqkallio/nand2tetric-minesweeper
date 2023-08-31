@@ -13,6 +13,7 @@ class Cell {
 		let mMine = false;
 		let mOpen = false;
 		let mSelected = false;
+		let mFlagged = false;
 		let mNeighborMines = 0;
 
 		return this;

@@ -25,8 +25,31 @@ class GameField {
 	}
 
 	method void dispose() {
+		var int i, j;
+		var Array row;
+		var Cell cell; 
+
+		let i = 0;
+
+		while (i < HEIGHT) {
+			let row = mField[i];
+			let j = 0;
+
+			while (j < WIDTH) {
+				let cell = row[j];
+				do cell.dispose();
+
+				let j = j + 1;
+			}
+
+			do row.dispose();
+
+			let i = i + 1;
+		}
+
 		do mField.dispose();
 		do mSelected.dispose();
+		do mHeader.dispose();
 
 		do Memory.deAlloc(this);
 
@@ -414,6 +437,73 @@ class GameField {
 			let i = i + 1;
 		}
 
+		return;
+	}
+
+	method void run() {
+		var char key;
+		var boolean continue;
+		var char lastKey;
+
+		let lastKey = 0;
+
+		do Screen.clearScreen();
+		do draw();
+
+		while (true) {
+			let key = Keyboard.keyPressed();
+
+			if (~(key = lastKey)) {
+				let lastKey = key;
+
+				if (~(key = 0)) {
+					if (key = 81) {
+						return;
+					}
+
+					if (key = 32) {
+						let continue = open();
+
+						if (~continue) {
+							while (~(key = 0)) {
+								let key = Keyboard.keyPressed();
+							}
+
+							while (key = 0) {
+								let key = Keyboard.keyPressed();
+							}
+
+							return;
+						}
+					}
+
+					if (key = 70) {
+						do flag();
+					}
+
+					if (key = 130) {
+						do left();
+					}
+
+					if (key = 131) {
+						do up();
+					}
+
+					if (key = 132) {
+						do right();
+					}
+
+					if (key = 133) {
+						do down();
+					}
+					
+					if (key = 140) {
+						return;
+					}	
+
+				}
+			}
+		}
 		return;
 	}
 }

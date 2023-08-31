@@ -1,0 +1,25 @@
+class Globals {
+	function int NEW_GAME() {
+		return 0;
+	}
+
+	function int INSTRUCTIONS() {
+		return 1;
+	}
+
+	function int BACK() {
+		return 2;
+	}
+
+	function int N_MINES_EASY() {
+		return 50;
+	}
+
+	function int N_MINES_MEDIUM() {
+		return 100;
+	}
+
+	function int N_MINES_HARD() {
+		return 150;
+	}
+}

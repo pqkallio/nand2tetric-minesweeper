@@ -25,73 +25,29 @@ class Minesweeper {
 	}
 
 	method void run() {
-		var char key;
-		var boolean continue;
 		var int transition;
 		var int seed;
 		var int mines;
 
 		let mines = 30;
 
-		let transition = mMainMenu.run();
-
-		if (transition = MainMenu.newGame()) {
-			let mines = mNewGameMenu.run();
-		}
-
-		do TextRenderer.loadScreen();
-
-		let seed = mMainMenu.getCounterValue();
-		do mRand.seed(seed);
-
-		let mField = GameField.new(mRand, mines);
-		do mField.draw();
-
 		while (true) {
-			let key = Keyboard.keyPressed();
+			let transition = mMainMenu.run();
 
-			if (~(key = lastKey)) {
-				let lastKey = key;
+			if (transition = MainMenu.newGame()) {
+				let mines = mNewGameMenu.run();
 
-				if (~(key = 0)) {
-					if (key = 81) {
-						return;
-					}
+				do TextRenderer.loadScreen();
 
-					if (key = 32) {
-						let continue = mField.open();
+				let seed = mMainMenu.getCounterValue();
+				do mRand.seed(seed);
 
-						if (~continue) {
-							return;
-						}
-					}
+				let mField = GameField.new(mRand, mines);
+				do mField.run();
 
-					if (key = 70) {
-						do mField.flag();
-					}
-
-					if (key = 130) {
-						do mField.left();
-					}
-
-					if (key = 131) {
-						do mField.up();
-					}
-
-					if (key = 132) {
-						do mField.right();
-					}
-
-					if (key = 133) {
-						do mField.down();
-					}
-					
-					if (key = 140) {
-						return;
-					}	
-
-				}
+				do mField.dispose();
 			}
+
 		}
 
 		return;
